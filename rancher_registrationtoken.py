@@ -18,7 +18,7 @@ class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
         validate_certs = kwargs.get('validate_certs', True)
         ret = []
-        url = variables['url'] if 'url' in variables else ANSIBLE_RACHER_URL
+        url = kwargs.pop('url', ANSIBLE_RACHER_URL)
         for term in terms:
             display.vvvv('rancher_registrationtoken lookup of %s' % term)
             try:
