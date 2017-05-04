@@ -399,3 +399,5 @@ ok: [localhost] => (item=1CD1965A4BC67EB90972:1483142400000:OoHf2PxHihHu2Tc51CoU
 PLAY RECAP *******************************************************************************************************************************************
 localhost                  : ok=1    changed=0    unreachable=0    failed=0
 ```
+
+[Rancher]: https://www.rancher.com
