@@ -11,18 +11,27 @@ except ImportError:
 
     display = Display()
 
-ANSIBLE_RACHER_URL = 'http://127.0.0.1:8080'
+RANCHER_API = 'v2-beta'
+RANCHER_URL = os.environ.get('RANCHER_URL', 'http://127.0.0.1:8080')
+RANCHER_ACCESS_KEY = os.environ.get('RANCHER_ACCESS_KEY', None)
+RANCHER_SECRET_KEY = os.environ.get('RANCHER_SECRET_KEY', None)
 
 
 class LookupModule(LookupBase):
     def run(self, terms, variables=None, **kwargs):
-        validate_certs = kwargs.get('validate_certs', True)
         ret = []
-        url = kwargs.pop('url', ANSIBLE_RACHER_URL)
+        url = kwargs.pop('url', RANCHER_URL)
+        url_username = kwargs.pop('url_username', RANCHER_ACCESS_KEY)
+        url_password = kwargs.pop('url_password', RANCHER_SECRET_KEY)
+        api = kwargs.pop('api', RANCHER_API)
+        validate_certs = kwargs.get('validate_certs', True)
         for term in terms:
             display.vvvv('rancher_account lookup of %s on %s' % (term, url))
             try:
-                response = open_url('%s/v2-beta/accounts' % (url))
+                response = open_url('%s/%s/accounts' % (url, api),
+                                    url_username=url_username,
+                                    url_password=url_password,
+                                    validate_certs=validate_certs)
             except HTTPError as e:
                 raise AnsibleError("Received HTTP error for %s : %s" % (term, str(e)))
             except URLError as e:
